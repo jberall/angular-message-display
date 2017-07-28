@@ -2,20 +2,24 @@ import { AbstractControl, FormGroup } from '@angular/forms';
 
 export class MessageDisplay {
     
-  
-  generateErrorMessages(form: FormGroup, labels: Array<any>, formErrors: {}){
+
+  generateErrorMessages(form: FormGroup, labels: Array<any>, formErrors:Array<any>){
     for (let field of Object.keys(form.value)) {
         let control = form.controls[field];
         let label = labels[field];
-        
+
         switch(this.findControlType(form.controls[field].value)) {
           case "string":
-            // formErrors[field] = this.stringErrorMessages(form,label,field,formErrors[field]);
-            this.stringErrorMessages(form,label,field,formErrors[field]);
+            // formErrors[field] = this.stringErrorMessages(form,label,field,);
+           this.stringErrorMessages(form,label,field,formErrors, [field]);
             break;
           case "object":
+            // this.objectLoop()
             for(let fld of Object.keys(form.controls[field].value)){
-              formErrors[field][fld] = this.stringErrorMessages(control,label[fld],fld,formErrors);
+              // formErrors[field][fld] = this.stringErrorMessages(control,label[fld],fld,formErrors);
+              let arr = [field, fld];
+              
+              this.stringErrorMessages(control,label[fld],fld,formErrors,arr);
             }
             break;
           case "array":
@@ -27,13 +31,30 @@ export class MessageDisplay {
         }
     }    
   }
+
+  objectLoop(){
+    console.log ('objectLoop');
+    // for(let fld of Object.keys(form.controls[field].value)){
+    //   // formErrors[field][fld] = this.stringErrorMessages(control,label[fld],fld,formErrors);
+    // }    
+  }
   
-  private objectLoop(){
+  stringErrorMessages(childControl:AbstractControl,label:string,field:string,formErrors?:Array<any>,errField?){
+    // return this.errorMessage(childControl.get(field),label);
     
+    switch(errField.length) {
+      case 1:
+        formErrors[errField] = this.errorMessage(childControl.get(field),label);
+        break;
+      case 2: 
+        console.log("errFields",errField, errField.length, errField[1])
+        formErrors[errField[0]][errField[1]] = this.errorMessage(childControl.get(field),label);
+        break;
+    }
+    // formErrors[errField] = this.errorMessage(childControl.get(field),label);
   }
-  stringErrorMessages(childControl:AbstractControl,label:string,field:string,errMsg?){
-    errMsg = this.errorMessage(childControl.get(field),label);
-  }
+  
+
   
   findControlType(jsonObj:any):string{
     let controlType: string = typeof jsonObj;

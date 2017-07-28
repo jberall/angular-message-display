@@ -13,14 +13,15 @@ import { MessageDisplay } from '../../helpers/message-display';
 })
 export class FormThorallMaterialComponent implements OnInit {
 
-  formErrors = {
-    counter: '',
-    name: '',
-    address:'',
-    city:'',
-    mobile: { phone: '', ext: ''},
-  };  
+  // formErrors = {
+  //   counter: '',
+  //   name: '',
+  //   address:'',
+  //   city:'',
+  //   mobile: { phone: '', ext: ''},
+  // };  
   
+  formErrors = this.frmErrors();
   labels = this.Labels();
   hints = this.Hints();
 
@@ -34,6 +35,7 @@ export class FormThorallMaterialComponent implements OnInit {
   }
   
   ngOnInit() {
+    console.log(this.formErrors);
     this.modelForm = this.fb.group({
       // counter: [3, createCounterRangeValidator(8, 2)],
       name: ['',[Validators.required,Validators.minLength(3)]],
@@ -50,8 +52,9 @@ export class FormThorallMaterialComponent implements OnInit {
     });
 
     this.modelForm.valueChanges.subscribe(
-      formData => this.onValueChanged(formData, this.modelForm)
+      formData => this._md.generateErrorMessages(this.modelForm,this.labels,this.formErrors)
     );    
+    
   }
   arr = new FormArray([
     // new FormControl('Nancy', Validators.minLength(2)),
@@ -104,92 +107,7 @@ export class FormThorallMaterialComponent implements OnInit {
     let errors = [];
     errors['phone'] = '';
     errors['ext'] = '';
+    return errors;
   }
-  
-
-  onValueChanged(formData: any, form: FormGroup){
-    if (!form) { return ;}
-    this._md.generateErrorMessages(form,this.labels,this.formErrors);
-    // //  console.log('form',  form.value);
-    // for (let field of Object.keys(form.value)) {
-    //     let control = form.controls[field];
-    //     let label = this.labels[field];
-    //     switch(this._md.findControlType(form.controls[field].value)) {
-    //       case "string":
-    //         this.formErrors[field] = this._md.errorMessage(form.get(field), label); 
-    //         break;
-    //       case "object":
-    //         for(let fld of Object.keys(form.controls[field].value)){
-    //           this.formErrors[field][fld] = this._md.errorMessage(control.get(fld),label[fld]);
-    //         }
-    //         break;
-    //       case "array":
-            
-    //         break;
-    //       default:
-    //         console.log(field, form.value[field], typeof form.value[field]);
-    //         break;
-    //     }
-    // }
-
-  }  
+      
 }
-
-
-
-
-/*
-  trimFields = this.TrimFields();
-  TrimFields(){
-    return {
-      name: null,
-      address: null,
-    };
-  }
-testTrim(field:string,form: FormGroup,){
-  
-  let val = form.get(field).value;
-
-  if (typeof val !== "string" || val === 'undefined') {
-    // console.log('return ' + typeof val);
-    return ;
-  }
-  const options: {} = {
-    onlySelf: true,
-    // emitEvent: true,
-    // emitModelToViewChange: true,
-    // emitViewToModelChange: true    
-  };  
-  var obj:{} = {};
-  obj[field] = val.trim();
-  form.patchValue(obj,options);
-
-}
-  trimItem(form: FormGroup){
-    if (!form ) return ;
-    for (let field in this.trimFields) {
-      const c = form.controls[field]
-      if (typeof c.value === "string" && c.value !== 'undefined') {
-          (<FormControl>c).setValue(c.value.trim(), { onlySelf: true }); 
-          //  console.log('field is '+ field + ' type of ' + typeof c.value)         
-      }      
-    }
-  }
-  */
-
-//  <tmg-input [id]="'name'" [name]="'name'" [placeholder]="PlaceHolder" [(formControlName)]="name" [formGroup]="modelForm" [(ngModel)]="modelForm.name"></tmg-input>
-// <h3>Template Driven Form</h3>
-//     <form #form="ngForm">
-//        <!-- <counter-input name="counter" ngModel></counter-input>  -->
-//       <counter-input ngModel name="counter" counterRangeMax="10" counterRangeMin="0">Counter Ex.</counter-input>
-//           <br>
-//         <md-input-container> 
-//         <input mdInput ngModel placeholder="Template Driven Form Field" name="tdf" #tdf required>
-//         <md-hint>TDF Hint </md-hint>
-//           <md-error *ngIf="!tdf.valid">TDF Error Message</md-error>  
-//         </md-input-container>           
-//     </form>
-
-//     <p *ngIf="!form.valid">TDF is invalid!</p>
-//     <pre>form data: {{ form.value | json }} </pre>
-//     <pre>form errors: {{ form.errors | json }} </pre>
