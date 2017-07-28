@@ -1,0 +1,38 @@
+<p>Article link: https://blog.thoughtram.io/angular/2016/07/27/custom-form-controls-in-angular-2.html</p>
+<p>Youtube link: https://www.youtube.com/watch?v=LWrGa632L7w</p>
+
+<counter-input ></counter-input>
+
+<h3>Template Driven Form</h3>
+    <form #form="ngForm">
+       <!-- <counter-input name="counter" ngModel></counter-input>  -->
+      <counter-input
+          ngModel
+          name="counter"
+          counterRangeMax="10"
+          counterRangeMin="0"
+          ></counter-input>
+    </form>
+
+    <p *ngIf="!form.valid">Counter is invalid!</p>
+    <pre>form data: {{ form.value | json }} </pre>
+    <pre>form errors: {{ form.errors | json }} </pre>
+    
+<h3>Model initialization with property binding</h3>
+    <form #form2="ngForm">
+      <p>ngModel value: {{outerCounterValue}}</p>
+      <counter-input name="counter" [(ngModel)]="outerCounterValue" counterRangeMax="7"
+          counterRangeMin="3"></counter-input>
+    </form>
+
+        <p *ngIf="!form2.valid">Counter is invalid!</p>
+    <pre>form data: {{ form2.value | json }} </pre>
+    <pre>form errors: {{ form2.errors | json }} </pre>
+    
+<h3>Using it inside model-driven forms</h3>
+    <form [formGroup]="form3">
+      <counter-input formControlName="counter"></counter-input>
+    </form>
+    <p *ngIf="!form3.valid">Counter is invalid! <br> {{errCounter}}</p>
+    <pre>form data: {{ form3.value | json }} </pre>
+    <pre>form errors: {{ form3.errors | json }} </pre>

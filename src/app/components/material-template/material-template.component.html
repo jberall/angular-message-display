@@ -1,0 +1,20 @@
+
+
+<div [formGroup]="form" *ngIf="!groupName">
+ <md-input-container [formGroup]="form" >  
+  <input mdInput [formControlName]="key"  placeholder="{{label}}" (blur)="onBlurEvent()" >
+  <md-error *ngIf="errmsg">{{ errmsg }}</md-error>
+  <md-hint>{{ hint }}</md-hint>
+</md-input-container> 
+</div>
+
+<!-- FormGroupName = {{groupName}} <br>
+FormGroup = {{ form }} <br>
+key = {{ key }} <br> -->
+<div [formGroup]="form" *ngIf="groupName">
+ <md-input-container [formGroup]="form" formGroupName="{{groupName}}">  
+  <input mdInput [formControlName]="key"  placeholder="{{label}}" (blur)="onBlurEvent()" >
+  <md-error *ngIf="errmsg">{{ errmsg }}</md-error>
+  <md-hint>{{ hint }}</md-hint>
+</md-input-container> 
+</div>

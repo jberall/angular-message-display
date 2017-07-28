@@ -1,0 +1,17 @@
+<h1>Angular Custom Form Control</h1>
+<br />
+
+<h3>NgModel</h3>
+<app-switch [(ngModel)]="value" [label]="'My Switch'"></app-switch><br />
+<strong>Value:</strong> {{value}}
+
+<br /><br />
+<hr />
+<br />
+
+<h3>Reactive Forms</h3>
+<form [formGroup]="myForm" (ngSubmit)="submit()">
+  <app-switch formControlName="mySwitch" [label]="'My Switch'"></app-switch>
+  <button>Submit</button>
+</form>
+

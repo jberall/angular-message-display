@@ -1,0 +1,6 @@
+ <md-input-container> 
+  <input mdInput placeholder="{{ label }}" >
+  <md-hint>{{ hint }}</md-hint>
+  <md-error *ngIf="errMsg">{{errMsg}}</md-error>
+</md-input-container> 
+<pre>the error is {{ errMsg }}</pre> 
