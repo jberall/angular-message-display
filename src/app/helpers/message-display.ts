@@ -1,8 +1,57 @@
-import { AbstractControl } from '@angular/forms';
+import { AbstractControl, FormGroup } from '@angular/forms';
 
 export class MessageDisplay {
     
-    FieldError(control: AbstractControl, label: string) {
+  
+  generateErrorMessages(form: FormGroup, labels: Array<any>, formErrors: {}){
+    for (let field of Object.keys(form.value)) {
+        let control = form.controls[field];
+        let label = labels[field];
+        
+        switch(this.findControlType(form.controls[field].value)) {
+          case "string":
+            // formErrors[field] = this.stringErrorMessages(form,label,field,formErrors[field]);
+            this.stringErrorMessages(form,label,field,formErrors[field]);
+            break;
+          case "object":
+            for(let fld of Object.keys(form.controls[field].value)){
+              formErrors[field][fld] = this.stringErrorMessages(control,label[fld],fld,formErrors);
+            }
+            break;
+          case "array":
+            
+            break;
+          default:
+            console.log(field, form.value[field], typeof form.value[field]);
+            break;
+        }
+    }    
+  }
+  
+  private objectLoop(){
+    
+  }
+  stringErrorMessages(childControl:AbstractControl,label:string,field:string,errMsg?){
+    errMsg = this.errorMessage(childControl.get(field),label);
+  }
+  
+  findControlType(jsonObj:any):string{
+    let controlType: string = typeof jsonObj;
+    switch(controlType) {
+      case "string":
+        break;
+      case "object":
+       if (jsonObj.length){
+         controlType = "array";
+       } 
+        break;
+      default:
+       console.log('no type', controlType)
+    }
+    return controlType;
+  }
+  
+    errorMessage(control: AbstractControl, label: string):string {
         
         var msg:string = '';
       // if (control && (control.dirty) && !control.valid) {

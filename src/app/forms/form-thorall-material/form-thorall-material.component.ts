@@ -109,35 +109,28 @@ export class FormThorallMaterialComponent implements OnInit {
 
   onValueChanged(formData: any, form: FormGroup){
     if (!form) { return ;}
-
-    //  console.log('form',  form.value);
-    for (let field of Object.keys(form.value)) {
-        let control = form.controls[field];
-        let label = this.labels[field];
-        switch(typeof form.controls[field].value) {
-          case "string":
-            // console.log('string',field)
-            this.formErrors[field] = this._md.FieldError(form.get(field), label); 
-            break;
-          case "object":
-            if (form.controls[field].value.length){
-              // this.formErrors[field]['phone'] = getFieldError(form.controls[field].get('phone'), this.labels[field]['phone']);
-              // console.log('object type Array with length', field )
-            } else {
-              // console.log('object JSON without length', field, 'value',form.controls[field].value )
-
-              for(let fld of Object.keys(form.controls[field].value)){
-                // console.log("the field value", fld)
-                
-                this.formErrors[field][fld] = this._md.FieldError(control.get(fld),label[fld]);
-              }
-            }
-            break;
-          default:
-            console.log(field, formData[field], typeof formData[field]);
-            break;
-        }
-    }
+    this._md.generateErrorMessages(form,this.labels,this.formErrors);
+    // //  console.log('form',  form.value);
+    // for (let field of Object.keys(form.value)) {
+    //     let control = form.controls[field];
+    //     let label = this.labels[field];
+    //     switch(this._md.findControlType(form.controls[field].value)) {
+    //       case "string":
+    //         this.formErrors[field] = this._md.errorMessage(form.get(field), label); 
+    //         break;
+    //       case "object":
+    //         for(let fld of Object.keys(form.controls[field].value)){
+    //           this.formErrors[field][fld] = this._md.errorMessage(control.get(fld),label[fld]);
+    //         }
+    //         break;
+    //       case "array":
+            
+    //         break;
+    //       default:
+    //         console.log(field, form.value[field], typeof form.value[field]);
+    //         break;
+    //     }
+    // }
 
   }  
 }
