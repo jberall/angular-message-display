@@ -45,7 +45,11 @@ export class FormThorallMaterialComponent implements OnInit {
       // mobile: this.fb.group({
       //    phone: ['',[Validators.required]],
       //    ext: ['', [Validators.required]], 
-      // })
+      //    subMobile: this.fb.group({
+      //       subA: new FormControl('',[Validators.required,Validators.minLength(2)]),
+      //       subB: new FormControl('',[Validators.required,Validators.minLength(3)]),
+      //     })
+      // }),
       mobile: this.mobile,
       arr: this.arr,
       
@@ -60,11 +64,18 @@ export class FormThorallMaterialComponent implements OnInit {
     // new FormControl('Nancy', Validators.minLength(2)),
     new FormControl('Drew'),
   ]);
-  mobile: FormGroup = new FormGroup({
+  
+  subMobile = new FormGroup({
+    subA: new FormControl('',[Validators.required,Validators.minLength(2)]),
+    subB: new FormControl('',[Validators.required,Validators.minLength(3)]),
+  })
+  mobile = new FormGroup({
     phone: new FormControl('',[Validators.required,Validators.minLength(2)]),
     ext: new FormControl('ext',[Validators.maxLength(1)] ),
+    subMobile: this.subMobile
   })
- 
+
+  
 
   Labels(){
     let labels = [];
@@ -79,7 +90,14 @@ export class FormThorallMaterialComponent implements OnInit {
     let labels=[];
     labels['phone'] ='Mobile #';
     labels['ext'] = 'Ext';
+    labels['subMobile'] = this.subMobileLabels();
     return labels;
+  }
+  subMobileLabels(){
+    let errors = [];
+    errors['subA'] = 'Sub Mob A';
+    errors['subB'] = 'Sub Mobile B';
+    return errors;  
   }
   Hints(){
     let hints = [];
@@ -91,6 +109,12 @@ export class FormThorallMaterialComponent implements OnInit {
   mobileHints(){
     let hints = [];
     // hints['phone'] = 'Mobile phone hint';
+    hints['subMobile'] = this.subMobileHints();
+    return hints;
+  }
+  subMobileHints(){
+    let hints = [];
+    hints['subA'] = 'Sub A hint';
     return hints;
   }
 
@@ -107,7 +131,14 @@ export class FormThorallMaterialComponent implements OnInit {
     let errors = [];
     errors['phone'] = '';
     errors['ext'] = '';
+    errors['subMobile'] = this.subMobileErrors();
     return errors;
+  }
+  subMobileErrors(){
+    let errors = [];
+    errors['subA'] = '';
+    errors['subB'] = '';
+    return errors;    
   }
       
 }

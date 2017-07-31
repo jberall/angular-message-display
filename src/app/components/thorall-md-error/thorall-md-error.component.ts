@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import {  FormControl, AbstractControl } from '@angular/forms';
+import { AbstractControl } from '@angular/forms';
 
 @Component({
   selector: 'thorall-md-error',
@@ -7,7 +7,5 @@ import {  FormControl, AbstractControl } from '@angular/forms';
   styleUrls: ['./thorall-md-error.component.css']
 })
 export class ThorallMdErrorComponent  {
-
   @Input() errmsg: string;
-
 }

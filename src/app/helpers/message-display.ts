@@ -2,75 +2,74 @@ import { AbstractControl, FormGroup } from '@angular/forms';
 
 export class MessageDisplay {
     
+  constructor(){
+    
+  }
 
-  generateErrorMessages(form: FormGroup, labels: Array<any>, formErrors:Array<any>){
+  generateErrorMessages(form: FormGroup, labels: string[], formErrors:string[]){
     for (let field of Object.keys(form.value)) {
-        let control = form.controls[field];
-        let label = labels[field];
-
-        switch(this.findControlType(form.controls[field].value)) {
-          case "string":
-            // formErrors[field] = this.stringErrorMessages(form,label,field,);
-           this.stringErrorMessages(form,label,field,formErrors, [field]);
-            break;
-          case "object":
-            // this.objectLoop()
-            for(let fld of Object.keys(form.controls[field].value)){
-              // formErrors[field][fld] = this.stringErrorMessages(control,label[fld],fld,formErrors);
-              let arr = [field, fld];
-              
-              this.stringErrorMessages(control,label[fld],fld,formErrors,arr);
-            }
-            break;
-          case "array":
-            
-            break;
-          default:
-            console.log(field, form.value[field], typeof form.value[field]);
-            break;
-        }
+        formErrors[field] = this.operateOnControl(form.get(field),labels[field]);
     }    
   }
-
-  objectLoop(){
-    console.log ('objectLoop');
-    // for(let fld of Object.keys(form.controls[field].value)){
-    //   // formErrors[field][fld] = this.stringErrorMessages(control,label[fld],fld,formErrors);
-    // }    
-  }
   
-  stringErrorMessages(childControl:AbstractControl,label:string,field:string,formErrors?:Array<any>,errField?){
-    // return this.errorMessage(childControl.get(field),label);
-    
-    switch(errField.length) {
-      case 1:
-        formErrors[errField] = this.errorMessage(childControl.get(field),label);
+    objectLoop(control:AbstractControl, labels){
+    let errMsg:string[] = [];      
+      
+    for(let field of Object.keys(control.value)){
+      switch(this.findControlType(control.get(field))) {
+        case "string":
+          errMsg[field] = this.errorMessage(control.get(field), labels[field]);
+          break;
+        case "object":
+          errMsg[field] = this.objectLoop(control.get(field), labels[field]);
+          break;
+        case "array":
+          console.log("need to program")
+          break;
+      }
+    }   
+
+    return errMsg;
+  }
+
+  operateOnControl(control:AbstractControl, labels){
+    switch(this.findControlType(control)) {
+      case "string":
+        return this.errorMessage(control,labels);
+      case "object":
+        return this.objectLoop(control,labels);
+        // console.log("operateOnControl", "object")
+        // break;
+      case "array":
+        console.log("operateOnControl", "array")
         break;
-      case 2: 
-        console.log("errFields",errField, errField.length, errField[1])
-        formErrors[errField[0]][errField[1]] = this.errorMessage(childControl.get(field),label);
-        break;
+        
+      default:
+       console.log('operateOnControl default', control, 'value', control.value);
     }
-    // formErrors[errField] = this.errorMessage(childControl.get(field),label);
   }
-  
 
   
-  findControlType(jsonObj:any):string{
-    let controlType: string = typeof jsonObj;
+  // stringErrorMessages(control:AbstractControl,label:string){
+  //     return  this.errorMessage(control,label);    
+  // }
+  
+  findControlType(control:AbstractControl):string{
+    let controlType: string = typeof control.value;
+    // console.log(controlType)
     switch(controlType) {
       case "string":
-        break;
+        return controlType;
       case "object":
-       if (jsonObj.length){
-         controlType = "array";
-       } 
-        break;
+        return (control.value.length) ? "array" : controlType;
+
       default:
        console.log('no type', controlType)
     }
     return controlType;
   }
+  
+
   
     errorMessage(control: AbstractControl, label: string):string {
         

@@ -6,17 +6,17 @@
               <input mdInput placeholder="{{labels.name}}" formControlName="name">
               <md-hint>{{ hints.name }}</md-hint>
               <thorall-md-error errmsg="{{formErrors.name}}"></thorall-md-error>
-              <!-- <p class="help-block" *ngIf="modelForm.get('name').hasError('required') && modelForm.get('name').touched">Debe ingresar una contraseña</p> -->
+               <p class="help-block" *ngIf="modelForm.get('name').hasError('required') && modelForm.get('name').touched">{{labels.name}} required.</p> 
             </md-input-container>          
-        </div>
-        <div>
+        <!-- </div>
+        <div> -->
             <md-input-container>
               <input mdInput placeholder="{{labels.address}}" formControlName="address">
               <md-hint>{{ hints.address }}</md-hint>
               <thorall-md-error errmsg="{{formErrors.address}}"></thorall-md-error>
             </md-input-container>          
-        </div>       
-        <div>
+        <!-- </div>       
+        <div> -->
             <md-input-container>
               <input mdInput placeholder="{{labels.city}}" formControlName="city">
               <md-hint>{{ hints.city }}</md-hint>
@@ -28,13 +28,23 @@
               <input mdInput placeholder="{{labels.mobile.phone}}" formControlName="phone">
               <md-hint>{{ hints.mobile.phone }}</md-hint>
               <thorall-md-error errmsg="{{formErrors.mobile.phone}}"></thorall-md-error>
+             <!-- <p class="help-block"  *ngIf="modelForm.get('mobile').get('phone').hasError('required') && modelForm.get('mobile').get('phone').touched">{{labels.mobile.phone}} required.</p>  -->
             </md-input-container> 
                      
             <md-input-container>
               <input mdInput placeholder="{{labels.mobile.ext}}" formControlName="ext">
               <md-hint>{{ hints.mobile.ext }}</md-hint>
               <thorall-md-error errmsg="{{formErrors.mobile.ext}}"></thorall-md-error>
-            </md-input-container>                      
+            </md-input-container>     
+            
+            <div formGroupName="subMobile"> 
+              
+              <md-input-container>
+                <input mdInput placeholder="{{labels.mobile.subMobile.subA}}" formControlName="subA">
+                 <md-hint>{{ hints.mobile.subMobile.subA }}</md-hint> 
+                 <thorall-md-error errmsg="{{formErrors.mobile.subMobile.subA}}"></thorall-md-error> 
+              </md-input-container>                
+            </div>                 
         </div>           
 
       <div class="form-row">

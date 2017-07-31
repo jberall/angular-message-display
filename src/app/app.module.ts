@@ -1,3 +1,4 @@
+
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 // import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -19,8 +20,8 @@ import { ThorallMdHintComponent } from './components/thorall-md-hint/thorall-md-
 import { ThorallMdErrorComponent } from './components/thorall-md-error/thorall-md-error.component';
 import { ThorallMdInputComponent } from './components/thorall-md-input/thorall-md-input.component';
 import { MaterialTemplateComponent } from './components/material-template/material-template.component';
-// import { TrimValueAccessor } from './directives/trim-value-accessor.directive';
 
+// import { TrimValueAccessor } from './directives/trim-value-accessor.directive';
 
 
 @NgModule({
@@ -33,6 +34,7 @@ import { MaterialTemplateComponent } from './components/material-template/materi
     MaterialModule,
     DynamicFormModule,
     AppRoutingModule,
+    // TrimValueAccessor    
     
   ],
   declarations: [
