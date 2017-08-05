@@ -3,6 +3,9 @@ import { FormBuilder, FormGroup, Validators, FormControl, AbstractControl, FormA
 
 import { createCounterRangeValidator } from '../../validators/create-counter-range.validator';
 import { MessageDisplay } from '../../helpers/message-display';
+import { Attachment } from '../../classes/Attachment';
+
+
 
 @Component({
   selector: 'form-thorall-material',
@@ -13,46 +16,30 @@ import { MessageDisplay } from '../../helpers/message-display';
 })
 export class FormThorallMaterialComponent implements OnInit {
 
-  // formErrors = {
-  //   counter: '',
-  //   name: '',
-  //   address:'',
-  //   city:'',
-  //   mobile: { phone: '', ext: ''},
-  // };  
-  
   formErrors = this.frmErrors();
   labels = this.Labels();
   hints = this.Hints();
-
   
   modelForm: FormGroup;
   
-  constructor(private fb: FormBuilder, private _md: MessageDisplay) {}
+  attachment = new Attachment();
+ 
+  constructor(
+    private fb: FormBuilder, 
+    private _md: MessageDisplay) {}
 
   onSubmit(){
     console.log('form return',JSON.stringify(this.modelForm.value));
   }
   
   ngOnInit() {
-    console.log(this.formErrors);
+    // console.log(this.formErrors);
     this.modelForm = this.fb.group({
-      // counter: [3, createCounterRangeValidator(8, 2)],
       name: ['',[Validators.required,Validators.minLength(3)]],
       address:['',[]],
       city:['',[Validators.required]],
-      //nested group
-      // mobile: this.fb.group({
-      //    phone: ['',[Validators.required]],
-      //    ext: ['', [Validators.required]], 
-      //    subMobile: this.fb.group({
-      //       subA: new FormControl('',[Validators.required,Validators.minLength(2)]),
-      //       subB: new FormControl('',[Validators.required,Validators.minLength(3)]),
-      //     })
-      // }),
       mobile: this.mobile,
-      arr: this.arr,
-      
+      attachments: this.fb.array([]),
     });
 
     this.modelForm.valueChanges.subscribe(
@@ -60,14 +47,42 @@ export class FormThorallMaterialComponent implements OnInit {
     );    
     
   }
-  arr = new FormArray([
-    // new FormControl('Nancy', Validators.minLength(2)),
-    new FormControl('Drew'),
-  ]);
+
+  
+  // setAttachments(attachments: Attachment[]) {
+  //   const attachmentsFGs = attachments.map(attachment => this.fb.group(attachment));
+  //   const attachmentFormArray = this.fb.array(attachmentsFGs);
+  //   this.modelForm.setControl('attachments', attachmentFormArray);
+  // }  
+  
+  get attachments(): FormArray {
+    return this.modelForm.get('attachments') as FormArray;
+  };  
+  
+  addAttachment() {   
+    let arrAtt = [];
+    console.log('errattachments1',this.formErrors['attachments']);
+    
+    arrAtt[this.attachments.length] = this.attachmentsErrors();
+    this.formErrors['attachments'] = arrAtt;
+
+    console.log('errattachments2', this.formErrors['attachments'])
+    this.attachments.push(this.attachment.newGroup());
+    // console.log('len', this.attachments.length)
+  } 
+  
+  deleteAttachment(index) {
+    // this.formErrors['attachments'].removeAt(index);
+    // console.log("index",index)
+    Array(this.formErrors['attachments']).splice(index,1);
+    // console.log(this.formErrors['attachments']);
+    
+    this.attachments.removeAt(index);
+  }
   
   subMobile = new FormGroup({
     subA: new FormControl('',[Validators.required,Validators.minLength(2)]),
-    subB: new FormControl('',[Validators.required,Validators.minLength(3)]),
+    // subB: new FormControl('',[Validators.required,Validators.minLength(3)]),
   })
   mobile = new FormGroup({
     phone: new FormControl('',[Validators.required,Validators.minLength(2)]),
@@ -76,14 +91,26 @@ export class FormThorallMaterialComponent implements OnInit {
   })
 
   
-
-  Labels(){
+  get theLabels():any[]{
+    let lbls = {
+      counter: 'The Counter',
+      name: 'My Name is'
+    };
     let labels = [];
-    labels['counter'] = 'Counter';
-    labels['name'] = 'Name';
+    for (let el of Object.keys(lbls)){
+      labels[el] = lbls[el];
+    }
+    return labels;
+  }
+  Labels(){
+    let labels = this.theLabels;
+    // let l = this.attachment.labels();
+    // labels['counter'] = 'Counter';
+    // labels['name'] = 'Name';
     labels['address'] = 'Address';
     labels['city'] = 'City';
     labels['mobile'] = this.mobileLabels();
+    labels['attachments'] = new Attachment().labels();
     return labels;
   }
   mobileLabels(){
@@ -99,6 +126,7 @@ export class FormThorallMaterialComponent implements OnInit {
     errors['subB'] = 'Sub Mobile B';
     return errors;  
   }
+  
   Hints(){
     let hints = [];
     // hints['counter'] ='Counter Hint';
@@ -124,7 +152,10 @@ export class FormThorallMaterialComponent implements OnInit {
     errors['name'] = '';
     errors['address'] = '';
     errors['city'] = '';
+    errors['arrL1'] = '';
     errors['mobile'] = this.mobileErrors();
+    errors['attachments'];
+    console.log('errors',errors)
     return errors;
   }
   mobileErrors(){
@@ -140,5 +171,11 @@ export class FormThorallMaterialComponent implements OnInit {
     errors['subB'] = '';
     return errors;    
   }
-      
+  attachmentsErrors(){
+    let errors = [];
+    errors['type'] = '';
+    errors['description'] = 'DESC ERROR';
+    return errors;
+  }      
 }
+

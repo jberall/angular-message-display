@@ -1,12 +1,28 @@
 <h3>Using it inside model-driven forms</h3>
     
     <form [formGroup]="modelForm"  (ngSubmit)="onSubmit()">
+      <div formArrayName="attachments">
+         <div *ngFor="let attachment of attachments.controls; let i=index" [formGroupName]="i" >
+           <h4>Attachment #{{i + 1}}</h4>
+            <md-input-container>
+              <input mdInput placeholder="{{labels.attachments.type}}" formControlName="type">
+              <thorall-md-error errmsg="{{formErrors.attachments[i].type}}"></thorall-md-error>
+            </md-input-container>    
+            <md-input-container>
+              <input mdInput placeholder="{{labels.attachments.description}}" formControlName="description">
+              <thorall-md-error errmsg="{{formErrors.attachments[i].description}}"></thorall-md-error>
+            </md-input-container>                    
+            <button (click)="deleteAttachment(i)" type="button">Delete Attachment {{ i }}</button> 
+        </div> 
+          <button (click)="addAttachment()" type="button">Add a Attachment</button>
+      </div>
+      
         <div>
             <md-input-container>
               <input mdInput placeholder="{{labels.name}}" formControlName="name">
               <md-hint>{{ hints.name }}</md-hint>
               <thorall-md-error errmsg="{{formErrors.name}}"></thorall-md-error>
-               <p class="help-block" *ngIf="modelForm.get('name').hasError('required') && modelForm.get('name').touched">{{labels.name}} required.</p> 
+               <!-- <p class="help-block" *ngIf="modelForm.get('name').hasError('required') && modelForm.get('name').touched">{{labels.name}} required.</p>  -->
             </md-input-container>          
         <!-- </div>
         <div> -->
@@ -53,6 +69,7 @@
     </form>
     
 <pre>form data: {{ modelForm.value | json }} </pre>
+<pre>form Errors: {{ modelForm.errors }} </pre>
 
 
 
